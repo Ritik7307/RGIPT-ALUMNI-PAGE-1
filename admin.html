@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Panel - RGIPT Alumni Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  </head>
+  <body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8" x-data="adminPanel()">
+      <h1 class="text-3xl font-bold text-gray-800 mb-8">
+        RGIPT Alumni Admin Panel
+      </h1>
+
+      <!-- Tabs -->
+      <div class="mb-6 border-b border-gray-300">
+        <button
+          @click="activeTab = 'pending'"
+          :class="activeTab === 'pending' ? 'border-b-2 border-blue-600 text-blue-600' : 'text-gray-600'"
+          class="px-6 py-3 font-semibold"
+        >
+          Pending Alumni
+        </button>
+        <button
+          @click="activeTab = 'contributions'"
+          :class="activeTab === 'contributions' ? 'border-b-2 border-blue-600 text-blue-600' : 'text-gray-600'"
+          class="px-6 py-3 font-semibold"
+        >
+          Contributions
+        </button>
+      </div>
+
+      <!-- Pending Alumni Tab -->
+      <div x-show="activeTab === 'pending'" class="space-y-4">
+        <div class="bg-white shadow-md rounded-lg overflow-hidden">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr>
+                <th
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase"
+                >
+                  Photo
+                </th>
+                <th
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase"
+                >
+                  Name
+                </th>
+                <th
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase"
+                >
+                  Email
+                </th>
+                <th
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase"
+                >
+                  Branch
+                </th>
+                <th
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase"
+                >
+                  Passing Year
+                </th>
+                <th
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase"
+                >
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              <template x-for="alumni in pendingAlumni" :key="alumni._id">
+                <tr>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    <img
+                      :src="alumni.photo"
+                      alt="Profile"
+                      class="w-12 h-12 rounded-full object-cover"
+                    />
+                  </td>
+                  <td
+                    class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
+                    x-text="alumni.name"
+                  ></td>
+                  <td
+                    class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                    x-text="alumni.email"
+                  ></td>
+                  <td
+                    class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                    x-text="alumni.branch"
+                  ></td>
+                  <td
+                    class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                    x-text="alumni.passingYear"
+                  ></td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm">
+                    <a
+                      :href="alumni.linkedin"
+                      target="_blank"
+                      class="text-blue-600 hover:underline mr-3"
+                      >LinkedIn</a
+                    >
+                    <button
+                      @click="verifyAlumni(alumni._id)"
+                      class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+                    >
+                      Verify
+                    </button>
+                  </td>
+                </tr>
+              </template>
+              <tr x-show="pendingAlumni.length === 0">
+                <td colspan="6" class="px-6 py-4 text-center text-gray-500">
+                  No pending alumni
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Contributions Tab -->
+      <div x-show="activeTab === 'contributions'">
+        <div class="bg-white shadow-md rounded-lg overflow-hidden">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr>
+                <th
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase"
+                >
+                  Date
+                </th>
+                <th
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase"
+                >
+                  Name
+                </th>
+                <th
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase"
+                >
+                  Email
+                </th>
+                <th
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase"
+                >
+                  Amount
+                </th>
+                <th
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase"
+                >
+                  Transaction ID
+                </th>
+                <th
+                  class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase"
+                >
+                  Batch
+                </th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              <template
+                x-for="contribution in contributions"
+                :key="contribution._id"
+              >
+                <tr>
+                  <td
+                    class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                    x-text="formatDate(contribution.createdAt)"
+                  ></td>
+                  <td
+                    class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
+                    x-text="contribution.fullName || 'Anonymous'"
+                  ></td>
+                  <td
+                    class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                    x-text="contribution.email"
+                  ></td>
+                  <td
+                    class="px-6 py-4 whitespace-nowrap text-sm font-bold text-green-600"
+                  >
+                    ₹<span x-text="contribution.amount"></span>
+                  </td>
+                  <td
+                    class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                    x-text="contribution.transactionId"
+                  ></td>
+                  <td
+                    class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                    x-text="contribution.batch || 'N/A'"
+                  ></td>
+                </tr>
+              </template>
+              <tr x-show="contributions.length === 0">
+                <td colspan="6" class="px-6 py-4 text-center text-gray-500">
+                  No contributions yet
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function adminPanel() {
+        return {
+          activeTab: "pending",
+          pendingAlumni: [],
+          contributions: [],
+
+          async init() {
+            await this.loadPendingAlumni();
+            await this.loadContributions();
+
+            // Refresh every 30 seconds
+            setInterval(() => {
+              if (this.activeTab === "pending") {
+                this.loadPendingAlumni();
+              } else {
+                this.loadContributions();
+              }
+            }, 30000);
+          },
+
+          async loadPendingAlumni() {
+            try {
+              const response = await fetch("/api/alumni/pending");
+              const data = await response.json();
+              this.pendingAlumni = data;
+            } catch (error) {
+              console.error("Error loading pending alumni:", error);
+            }
+          },
+
+          async loadContributions() {
+            try {
+              const response = await fetch("/api/contribution/all");
+              const data = await response.json();
+              this.contributions = data;
+            } catch (error) {
+              console.error("Error loading contributions:", error);
+            }
+          },
+
+          async verifyAlumni(id) {
+            if (!confirm("Are you sure you want to verify this alumni?"))
+              return;
+
+            try {
+              const response = await fetch(`/api/alumni/verify/${id}`, {
+                method: "POST",
+              });
+
+              if (response.ok) {
+                alert(
+                  "Alumni verified successfully! A confirmation email has been sent."
+                );
+                await this.loadPendingAlumni();
+              } else {
+                alert("Error verifying alumni");
+              }
+            } catch (error) {
+              console.error("Error verifying alumni:", error);
+              alert("Error verifying alumni");
+            }
+          },
+
+          formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString("en-GB");
+          },
+        };
+      }
+    </script>
+  </body>
+</html>

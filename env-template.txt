@@ -1,0 +1,6 @@
+PORT=3000
+MONGODB_URI=mongodb://localhost:27017/rgipt-alumni
+EMAIL_USER=your-email@gmail.com
+EMAIL_PASSWORD=your-16-digit-gmail-app-password
+ADMIN_EMAIL=24mc3040@rgipt.ac.in
+

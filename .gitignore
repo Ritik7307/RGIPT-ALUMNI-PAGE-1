@@ -1,0 +1,51 @@
+# Node dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+
+# Environment files
+.env
+.env.*
+!.env-template.txt
+
+# Build outputs
+dist/
+build/
+out/
+.cache/
+.next/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Editor folders
+.vscode/
+.idea/
+
+# Temporary files
+*.tmp
+*.log
+*.bak
+*.swp
+*.swo
+*.orig
+*.rej
+*.tsbuildinfo
+
+# OS and binary files
+*.exe
+*.dll
+*.so
+*.dylib
+*.class
+*.war
+*.jar
+
+# Coverage / Testing
+coverage/
+
+# Misc
+*.iml
