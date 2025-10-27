@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -15,6 +16,7 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/uploads', express.static('uploads'));
+app.use('/images', express.static('images'));
 
 // MongoDB Connection
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/rgipt-alumni';
@@ -333,6 +335,7 @@ app.get('/', (req, res) => {
 
 // Serve other static files
 app.use(express.static(__dirname));
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);

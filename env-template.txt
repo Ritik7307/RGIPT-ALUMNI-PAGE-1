@@ -4,3 +4,4 @@ EMAIL_USER=your-email@gmail.com
 EMAIL_PASSWORD=your-16-digit-gmail-app-password
 ADMIN_EMAIL=24mc3040@rgipt.ac.in
 
+
